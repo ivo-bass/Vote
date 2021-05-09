@@ -1,15 +1,11 @@
+import os
+
 from kivy.lang import Builder
-from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
-from kivymd.uix.gridlayout import MDGridLayout
-from kivymd.uix.label import MDLabel
-from kivymd.uix.list import IRightBodyTouch, OneLineAvatarIconListItem, ILeftBodyTouch, OneLineAvatarListItem, \
-    OneLineIconListItem
+from kivymd.uix.list import ILeftBodyTouch, OneLineIconListItem
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.selectioncontrol import MDCheckbox
-
-import os
 
 from ballot import get_ballot
 
@@ -42,7 +38,6 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
         pass
 
 
-
 class VotingWindow(MDScreen):
     rows = {}
     is_empty = True
@@ -62,7 +57,6 @@ class VotingWindow(MDScreen):
                 self.rows[new_list_item.ids.check] = (digit, candidate)
 
             self.is_empty = False
-
 
     def vote(self):
         choice = None
