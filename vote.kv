@@ -113,6 +113,7 @@ WindowManager:
             on_press: root.clear()
 
 
+
 <VotingWindow>:
     name: "voting"
 
@@ -126,18 +127,13 @@ WindowManager:
             title: "Списък на партии, коалиции и независими кандидати:"
 
 
+        BoxLayout:
 
-        ScrollView:
+            ScrollView:
 
-            MDGridLayout:
-                id: grid
-                cols: 2
-                rows: 31
-                padding:(10,10)
-                spacing:(10,10)
-                row_default_height:100
-                size_hint_y: None
-                adaptive_height:True
+                MDList:
+                    id: scroll
+
 
 
     MDFillRoundFlatButton:
@@ -199,11 +195,19 @@ WindowManager:
     name: "admin"
 
 
+<ListItemWithCheckbox>:
+
+    LeftCheckbox:
+        id: check
+        group: "group"
+
+
+
 <Check@MDCheckbox>:
     group: 'group'
     size_hint: None, None
     size: dp(6), dp(6)
 
-<MDCheckbox>:
+<LeftCheckbox>:
     on_active:
         app.root.get_screen('voting').ids.vote_btn.disabled = False

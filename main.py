@@ -1,8 +1,11 @@
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
+from kivymd.uix.list import IRightBodyTouch, OneLineAvatarIconListItem, ILeftBodyTouch, OneLineAvatarListItem, \
+    OneLineIconListItem
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.selectioncontrol import MDCheckbox
 
@@ -30,6 +33,15 @@ class EntryWindow(MDScreen):
         self.ids.pin_input.text += digit
 
 
+class ListItemWithCheckbox(OneLineIconListItem):
+    pass
+
+
+class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
+    def on_press(self):
+        pass
+
+
 
 class VotingWindow(MDScreen):
     rows = {}
@@ -44,28 +56,20 @@ class VotingWindow(MDScreen):
             ballot = get_ballot(FILE_PATH)
             for digit, candidate in ballot:
                 string = digit + " :  " + candidate
+                new_list_item = ListItemWithCheckbox(text=string)
+                self.ids.scroll.add_widget(new_list_item)
 
-                # box = MDGridLayout(rows=1, cols=2)
+                self.rows[new_list_item.ids.check] = (digit, candidate)
 
-                checkbox = MDCheckbox(group="group", pos_hint=(1, None), halign="right")
-                item = MDLabel(text=string, size=(20, 20), pos_hint=(0.5, None))
-                # name = MDLabel(text=candidate, pos_hint=(0.5, None))
-
-                # box.add_widget(checkbox)
-                # box.add_widget(number)
-
-                self.ids.grid.add_widget(checkbox)
-                self.ids.grid.add_widget(item)
-
-                self.rows[checkbox] = (digit, candidate)
             self.is_empty = False
 
 
     def vote(self):
         choice = None
-        for checkbox, info in VotingWindow.rows.items():
-            if checkbox.active:
-                choice = checkbox
+
+        for list_item in self.ids.scroll.children:
+            if list_item.ids.check.active:
+                choice = list_item.ids.check
                 break
 
         number = self.rows[choice][0]
