@@ -1,7 +1,6 @@
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
@@ -31,46 +30,46 @@ class EntryWindow(MDScreen):
         self.ids.pin_input.text += digit
 
 
+
 class VotingWindow(MDScreen):
     rows = {}
+    is_empty = True
 
     def on_enter(self, *args):
-        ballot = get_ballot(FILE_PATH)
-        for digit, candidate in ballot:
-            box = MDGridLayout(rows=1, cols=2)
+        app.is_final_vote = False
 
-            checkbox = MDCheckbox(group="group", size=(6, 6), pos_hint=(0, None))
-            number = MDLabel(text=digit, size=(20, 20))
+        self.ids.vote_btn.disabled = app.vote["number"] is None
 
-            box.add_widget(checkbox)
-            box.add_widget(number)
+        if self.is_empty:
+            ballot = get_ballot(FILE_PATH)
+            for digit, candidate in ballot:
+                string = digit + " :  " + candidate
 
-            name = MDLabel(text=candidate, pos_hint=(0.5, None))
+                # box = MDGridLayout(rows=1, cols=2)
 
-            self.ids.grid.add_widget(box)
-            self.ids.grid.add_widget(name)
+                checkbox = MDCheckbox(group="group", pos_hint=(1, None), halign="right")
+                item = MDLabel(text=string, size=(20, 20), pos_hint=(0.5, None))
+                # name = MDLabel(text=candidate, pos_hint=(0.5, None))
 
-            VotingWindow.rows[checkbox] = (number.text, name.text)
+                # box.add_widget(checkbox)
+                # box.add_widget(number)
 
-    def on_leave(self, *args):
-        self.ids.grid.clear_widgets()
-        VotingWindow.rows = {}
+                self.ids.grid.add_widget(checkbox)
+                self.ids.grid.add_widget(item)
+
+                self.rows[checkbox] = (digit, candidate)
+            self.is_empty = False
+
 
     def vote(self):
         choice = None
-        is_valid = False
         for checkbox, info in VotingWindow.rows.items():
             if checkbox.active:
                 choice = checkbox
-                is_valid = True
                 break
 
-        if not is_valid:
-            pass  # TODO: error msg for missing choice
-
-
-        number = VotingWindow.rows[choice][0]
-        name = VotingWindow.rows[choice][1]
+        number = self.rows[choice][0]
+        name = self.rows[choice][1]
 
         choice_text = f"{number}: {name}"
         self.manager.get_screen('submit').ids.submit_label.text = \
@@ -79,10 +78,15 @@ class VotingWindow(MDScreen):
         app.vote["number"] = number
         app.vote["name"] = name
 
+        app.root.current = "submit"
+        self.manager.transition.direction = "left"
+
 
 class SubmitWindow(MDScreen):
+
     @staticmethod
     def write_to_db():
+        app.is_final_vote = True
         print(app.vote)
         pass
 
@@ -95,6 +99,7 @@ class VoteApp(MDApp):
     ADMIN_PINS = ("7878",)
     VOTER_PINS = ("0000", "1111", "9999")
 
+    is_final_vote = False
     vote = {"number": None, "name": None}
 
     def build(self):
