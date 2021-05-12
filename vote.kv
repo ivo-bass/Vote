@@ -103,14 +103,14 @@ WindowManager:
             on_release:
                 if root.ids.pin_input.text in app.VOTER_PINS: app.root.current = "voting"
                 elif root.ids.pin_input.text in app.ADMIN_PINS: app.root.current = "admin"
-                else: root.clear()
+                else: root.clear_field()
                 root.manager.transition.direction = "left"
 
         MDRoundFlatButton:
             id: clear
             text: " ИЗЧИСТИ "
             pos_hint: {"center_x": 0.5}
-            on_press: root.clear()
+            on_press: root.clear_field()
 
 
 
@@ -126,23 +126,16 @@ WindowManager:
             elevation: 10
             title: "Списък на партии, коалиции и независими кандидати:"
 
+        ScrollView:
+            MDList:
+                id: scroll
 
-        BoxLayout:
-
-            ScrollView:
-
-                MDList:
-                    id: scroll
-
-
-
-    MDFillRoundFlatButton:
-        id: vote_btn
-        text: "ГЛАСУВАЙ"
-        pos_hint: {"center_x": 0.5}
-
-        on_press:
-            root.vote()
+        MDFillRoundFlatButton:
+            id: vote_btn
+            text: "ГЛАСУВАЙ"
+            pos_hint: {"center_x": 0.5}
+            on_press:
+                root.vote()
 
 
 
@@ -177,8 +170,8 @@ WindowManager:
             text: "ПОТВЪРДИ"
             pos_hint: {"center_x": 0.5}
             on_press:
-                root.write_to_db()
-                app.stop()
+                app.is_final_vote = True
+                root.submit()
 
 
         MDRoundFlatButton:
@@ -189,25 +182,14 @@ WindowManager:
                 root.manager.transition.direction = "right"
 
 
-
-
 <AdminWindow>:
     name: "admin"
 
 
-<ListItemWithCheckbox>:
 
+<ListItemWithCheckbox>:
     LeftCheckbox:
         id: check
         group: "group"
-
-
-
-<Check@MDCheckbox>:
-    group: 'group'
-    size_hint: None, None
-    size: dp(6), dp(6)
-
-<LeftCheckbox>:
-    on_active:
-        app.root.get_screen('voting').ids.vote_btn.disabled = False
+        on_active:
+            app.root.get_screen('voting').ids.vote_btn.disabled = False

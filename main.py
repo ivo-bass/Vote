@@ -3,16 +3,15 @@ import os
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
-from kivymd.uix.list import ILeftBodyTouch, OneLineIconListItem
+from kivymd.uix.button import MDFillRoundFlatButton
+from kivymd.uix.list import ILeftBodyTouch, OneLineIconListItem, OneLineListItem, OneLineAvatarListItem, \
+    OneLineRightIconListItem, CheckboxRightWidget, IRightBodyTouch, MDCheckbox, ILeftBody, ContainerSupport, \
+    OneLineAvatarIconListItem
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.selectioncontrol import MDCheckbox
+
 
 from ballot import get_ballot
-
-FILE_NAME = 'ballot.csv'
-
-CWD_PATH = os.path.abspath(os.getcwd())
-FILE_PATH = os.path.join(CWD_PATH, FILE_NAME)
+from write_to_db import write_to_db
 
 
 class AdminWindow(MDScreen):
@@ -20,7 +19,7 @@ class AdminWindow(MDScreen):
 
 
 class EntryWindow(MDScreen):
-    def clear(self):
+    def clear_field(self):
         self.ids.pin_input.text = ''
 
     def btn_press(self, digit):
@@ -29,13 +28,12 @@ class EntryWindow(MDScreen):
         self.ids.pin_input.text += digit
 
 
-class ListItemWithCheckbox(OneLineIconListItem):
+class ListItemWithCheckbox(OneLineAvatarIconListItem):
     pass
 
 
-class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
-    def on_press(self):
-        pass
+class LeftCheckbox(MDCheckbox, ILeftBodyTouch):
+    pass
 
 
 class VotingWindow(MDScreen):
@@ -44,11 +42,10 @@ class VotingWindow(MDScreen):
 
     def on_enter(self, *args):
         app.is_final_vote = False
-
-        self.ids.vote_btn.disabled = app.vote["number"] is None
+        self.ids.vote_btn.disabled = app.vote is None
 
         if self.is_empty:
-            ballot = get_ballot(FILE_PATH)
+            ballot = get_ballot()
             for digit, candidate in ballot:
                 string = digit + " :  " + candidate
                 new_list_item = ListItemWithCheckbox(text=string)
@@ -73,20 +70,18 @@ class VotingWindow(MDScreen):
         self.manager.get_screen('submit').ids.submit_label.text = \
             f"Вие избрахте:\n\n{choice_text}\n\nПотвърждавате ли направения избор?"
 
-        app.vote["number"] = number
-        app.vote["name"] = name
+        app.vote = number
 
         app.root.current = "submit"
         self.manager.transition.direction = "left"
 
 
 class SubmitWindow(MDScreen):
-
     @staticmethod
-    def write_to_db():
-        app.is_final_vote = True
-        print(app.vote)
-        pass
+    def submit():
+        if app.is_final_vote:
+            write_to_db(app.vote)
+        app.stop()
 
 
 class WindowManager(ScreenManager):
@@ -98,7 +93,7 @@ class VoteApp(MDApp):
     VOTER_PINS = ("0000", "1111", "9999")
 
     is_final_vote = False
-    vote = {"number": None, "name": None}
+    vote = None
 
     def build(self):
         self.theme_cls.primary_palette = "BlueGray"
