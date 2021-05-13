@@ -27,7 +27,7 @@ def calculate_results(results):
 
 
 def sort_results(results):
-    return sorted(results.items(), key=lambda x: (x[1], x[0]), reverse=True)
+    return sorted(results.items(), key=lambda x: (-x[1], x[0]))
 
 
 def get_results():
@@ -46,5 +46,5 @@ def print_results(results):
         print(f"{counter}. {name} => {votes} {word}.")
 
 
-print(get_results())
-print_results(get_results())
+# print(get_results())
+# print_results(get_results())

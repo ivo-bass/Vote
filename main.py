@@ -11,11 +11,41 @@ from kivymd.uix.screen import MDScreen
 
 
 from ballot import get_ballot
+from get_results import get_results
 from write_to_db import write_to_db
 
 
+class ResultsWindow(MDScreen):
+    def on_enter(self, *args):
+        results = get_results()
+        counter = 0
+        for name, votes in results:
+            counter += 1
+            string = f"{counter}.  {name} => {votes}бр. гласове"
+            new_list_item = OneLineListItem(text=string)
+            self.ids.results_list.add_widget(new_list_item)
+
+
 class AdminWindow(MDScreen):
-    pass
+    @staticmethod
+    def power_off():
+        app.stop()
+
+    def start_elections(self):
+        app.is_voting_started = True
+        app.status = "АКТИВНО ГЛАСУВАНЕ"
+        self.manager.get_screen('entry').ids.pin_input.text = ''
+        self.manager.get_screen('entry').ids.status.title = app.status
+        app.root.current = "entry"
+        self.manager.transition.direction = "right"
+
+    def end_elections(self):
+        app.is_voting_started = False
+        self.print_results()
+
+    def print_results(self):
+        app.root.current = "results"
+        self.manager.transition.direction = "left"
 
 
 class NumpadButton(MDFillRoundFlatButton):
@@ -23,7 +53,6 @@ class NumpadButton(MDFillRoundFlatButton):
 
 
 class EntryWindow(MDScreen):
-
     def clear_field(self):
         self.ids.pin_input.text = ''
 
@@ -81,11 +110,12 @@ class VotingWindow(MDScreen):
 
 
 class SubmitWindow(MDScreen):
-    @staticmethod
-    def submit():
+    def submit(self):
         if app.is_final_vote:
             write_to_db(app.vote)
-        app.stop()
+        self.manager.get_screen('entry').ids.pin_input.text = ''
+        app.root.current = "entry"
+        self.manager.transition.direction = "left"
 
 
 class WindowManager(ScreenManager):
@@ -96,6 +126,8 @@ class VoteApp(MDApp):
     ADMIN_PINS = ("7878",)
     VOTER_PINS = ("0000", "1111", "9999")
 
+    status = "ГЛАСУВАНЕТО НЕ Е АКТИВНО"
+    is_voting_started = False
     is_final_vote = False
     vote = None
 

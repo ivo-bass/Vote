@@ -3,11 +3,16 @@ WindowManager:
     VotingWindow:
     SubmitWindow:
     AdminWindow:
+    ResultsWindow:
 
 
 <EntryWindow>:
     name: "entry"
     md_bg_color: app.theme_cls.primary_color
+
+    MDToolbar:
+        id: status
+        title: "ГЛАСУВАНЕТО НЕ Е АКТИВНО"
 
     MDCard:
         size_hint: None, None
@@ -102,7 +107,7 @@ WindowManager:
             text: "ПРОДЪЛЖИ"
             pos_hint: {"center_x": 0.5}
             on_release:
-                if root.ids.pin_input.text in app.VOTER_PINS: app.root.current = "voting"
+                if root.ids.pin_input.text in app.VOTER_PINS and app.is_voting_started: app.root.current = "voting"
                 elif root.ids.pin_input.text in app.ADMIN_PINS: app.root.current = "admin"
                 else: root.clear_field()
                 root.manager.transition.direction = "left"
@@ -130,6 +135,10 @@ WindowManager:
         ScrollView:
             MDList:
                 id: scroll
+
+
+        MDSeparator:
+            height: "2dp"
 
         MDFillRoundFlatButton:
             id: vote_btn
@@ -185,7 +194,70 @@ WindowManager:
 
 <AdminWindow>:
     name: "admin"
+    md_bg_color: app.theme_cls.primary_color
 
+    MDToolbar:
+        elevation: 10
+        title: "АДМИНИСТРАТОР"
+
+    MDCard:
+        size_hint: None, None
+        size: "300dp", "150dp"
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        elevation: "13dp"
+        spacing: "20dp"
+        orientation: "vertical"
+        focus_behavior: True
+
+        MDSeparator:
+            height: "2dp"
+
+        MDFillRoundFlatButton:
+            text: "НАЧАЛО НА ИЗБОРНИЯ ДЕН"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            on_press:
+                root.start_elections()
+
+        MDSeparator:
+            height: "2dp"
+
+
+        MDFillRoundFlatButton:
+            text: "КРАЙ НА ИЗБОРНИЯ ДЕН"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            on_press:
+                root.end_elections()
+
+        MDSeparator:
+            height: "2dp"
+
+
+<ResultsWindow>:
+    name: "results"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+        spacing: "10dp"
+
+        MDToolbar:
+            elevation: 10
+            title: "Секционни резултати от изборния ден:"
+
+        ScrollView:
+            MDList:
+                id: results_list
+
+
+        MDSeparator:
+            height: "2dp"
+
+        MDFillRoundFlatButton:
+            id: vote_btn
+            text: "ИЗКЛЮЧИ МАШИНАТА"
+            pos_hint: {"center_x": 0.5}
+            on_press:
+                app.root.get_screen("admin").power_off()
 
 <ListItem>:
     id: list_item
