@@ -36,6 +36,7 @@ WindowManager:
             height: "2dp"
 
         MDGridLayout:
+            id: keypad
             cols: 3
             rows: 4
             spacing: "10dp"
@@ -43,7 +44,7 @@ WindowManager:
             MDFillRoundFlatButton:
                 text: "1"
                 font_size: 20
-                on_press: root.btn_press("1")
+                on_press: root.btn_press(self.text)
 
             MDFillRoundFlatButton:
                 text: "2"
@@ -186,10 +187,5 @@ WindowManager:
     name: "admin"
 
 
-
-<ListItemWithCheckbox>:
-    LeftCheckbox:
-        id: check
-        group: "group"
-        on_active:
-            app.root.get_screen('voting').ids.vote_btn.disabled = False
+<ListItem>:
+    id: list_item

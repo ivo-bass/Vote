@@ -19,10 +19,10 @@ def read_results():
 
 def calculate_results(results):
     calculated_results = {}
-    for number in results:
-        if number not in calculated_results:
-            calculated_results[number] = 0
-        calculated_results[number] += 1
+    for name in results:
+        if name not in calculated_results:
+            calculated_results[name] = 0
+        calculated_results[name] += 1
     return calculated_results
 
 
@@ -30,30 +30,20 @@ def sort_results(results):
     return sorted(results.items(), key=lambda x: (x[1], x[0]), reverse=True)
 
 
-def add_name(results):
-    bind_results = {}
-    ballot = dict(get_ballot())
-    for number, votes in results:
-        bind_results[number] = ballot[number], votes
-    return bind_results
-
-
 def get_results():
     votes = read_results()
     calculated_results = calculate_results(votes)
     sorted_results = sort_results(calculated_results)
-    results = add_name(sorted_results)
-    return results
+    return sorted_results
 
 
 def print_results(results):
     counter = 0
     print("Секционни резултати:\n")
-    for number, token in results.items():
-        name, votes = token
+    for name, votes in results:
         counter += 1
         word = "гласа" if votes > 1 else "глас"
-        print(f"{counter}. ({number}) {name} => {votes} {word}.")
+        print(f"{counter}. {name} => {votes} {word}.")
 
 
 print(get_results())
