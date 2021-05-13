@@ -18,7 +18,12 @@ class AdminWindow(MDScreen):
     pass
 
 
+class NumpadButton(MDFillRoundFlatButton):
+    pass
+
+
 class EntryWindow(MDScreen):
+
     def clear_field(self):
         self.ids.pin_input.text = ''
 
@@ -28,49 +33,48 @@ class EntryWindow(MDScreen):
         self.ids.pin_input.text += digit
 
 
-class ListItemWithCheckbox(OneLineAvatarIconListItem):
-    pass
+class ListItem(OneLineListItem):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.is_selected = False
 
+    def select(self):
+        self.is_selected = True
+        self.bg_color = app.theme_cls.primary_color
+        app.vote = self.text
+        app.root.get_screen('voting').ids.vote_btn.disabled = False
 
-class LeftCheckbox(MDCheckbox, ILeftBodyTouch):
-    pass
+    def deselect(self):
+        self.is_selected = False
+        self.bg_color = [0, 0, 0, 0]
+        app.vote = None
+
+    def on_press(self):
+        for item in VotingWindow.list_items:
+            if item.is_selected:
+                item.deselect()
+        self.select()
 
 
 class VotingWindow(MDScreen):
-    rows = {}
-    is_empty = True
+    list_items = []
 
     def on_enter(self, *args):
         app.is_final_vote = False
         self.ids.vote_btn.disabled = app.vote is None
 
-        if self.is_empty:
-            ballot = get_ballot()
-            for digit, candidate in ballot:
-                string = digit + " :  " + candidate
-                new_list_item = ListItemWithCheckbox(text=string)
-                self.ids.scroll.add_widget(new_list_item)
+        ballot = get_ballot()
+        for digit, candidate in ballot:
+            string = digit + " : " + candidate
+            new_list_item = ListItem(text=string)
+            self.ids.scroll.add_widget(new_list_item)
+            self.list_items.append(new_list_item)
 
-                self.rows[new_list_item.ids.check] = (digit, candidate)
-
-            self.is_empty = False
 
     def vote(self):
-        choice = None
-
-        for list_item in self.ids.scroll.children:
-            if list_item.ids.check.active:
-                choice = list_item.ids.check
-                break
-
-        number = self.rows[choice][0]
-        name = self.rows[choice][1]
-
-        choice_text = f"{number}: {name}"
+        choice_text = app.vote
         self.manager.get_screen('submit').ids.submit_label.text = \
             f"Вие избрахте:\n\n{choice_text}\n\nПотвърждавате ли направения избор?"
-
-        app.vote = number
 
         app.root.current = "submit"
         self.manager.transition.direction = "left"
