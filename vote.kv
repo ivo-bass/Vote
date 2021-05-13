@@ -13,6 +13,7 @@ WindowManager:
     MDToolbar:
         id: status
         title: "ГЛАСУВАНЕТО НЕ Е АКТИВНО"
+        type: "top"
 
     MDCard:
         size_hint: None, None
@@ -30,11 +31,11 @@ WindowManager:
         MDTextFieldRound:
             id: pin_input
             hint_text: "Въведете ПИН"
-            font_size: 20
-            max_text_length: 5
+            font_size: "20dp"
+            max_text_length: 4
             icon_left: 'key-variant'
             size_hint_x: None
-            width: 200
+            width: "200dp"
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
         MDSeparator:
@@ -48,47 +49,47 @@ WindowManager:
 
             MDFillRoundFlatButton:
                 text: "1"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press(self.text)
 
             MDFillRoundFlatButton:
                 text: "2"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("2")
 
             MDFillRoundFlatButton:
                 text: "3"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("3")
 
             MDFillRoundFlatButton:
                 text: "4"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("4")
 
             MDFillRoundFlatButton:
                 text: "5"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("5")
 
             MDFillRoundFlatButton:
                 text: "6"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("6")
 
             MDFillRoundFlatButton:
                 text: "7"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("7")
 
             MDFillRoundFlatButton:
                 text: "8"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("8")
 
             MDFillRoundFlatButton:
                 text: "9"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("9")
 
             MDRoundFlatButton:
@@ -96,7 +97,7 @@ WindowManager:
 
             MDFillRoundFlatButton:
                 text: "0"
-                font_size: 20
+                font_size: "20dp"
                 on_press: root.btn_press("0")
 
             MDRoundFlatButton:
@@ -124,17 +125,35 @@ WindowManager:
     name: "voting"
 
     MDBoxLayout:
+        id: vote_layout
         orientation: "vertical"
         size: root.width, root.height
         spacing: "10dp"
+        padding: "10dp"
+
 
         MDToolbar:
             elevation: 10
-            title: "Списък на партии, коалиции и независими кандидати:"
+            title: "БЮЛЕТИНА ЗА НАРОДНИ ПРЕДСТАВИТЕЛИ"
 
-        ScrollView:
-            MDList:
-                id: scroll
+        MDGridLayout:
+            cols: 2
+            id: vote_layout
+            size: root.width, root.height
+            spacing: "10dp"
+            padding: "10dp"
+
+            ScrollView:
+                id: scroll_view
+
+                MDList:
+                    id: scroll
+
+            MDGridLayout:
+                id: preferences_grid
+                cols: 3
+                rows: 6
+                spacing: "10dp"
 
 
         MDSeparator:
@@ -145,7 +164,7 @@ WindowManager:
             text: "ГЛАСУВАЙ"
             pos_hint: {"center_x": 0.5}
             on_press:
-                root.vote()
+                if app.vote: root.vote()
 
 
 
@@ -192,6 +211,7 @@ WindowManager:
                 root.manager.transition.direction = "right"
 
 
+
 <AdminWindow>:
     name: "admin"
     md_bg_color: app.theme_cls.primary_color
@@ -232,6 +252,7 @@ WindowManager:
             height: "2dp"
 
 
+
 <ResultsWindow>:
     name: "results"
 
@@ -239,6 +260,7 @@ WindowManager:
         orientation: "vertical"
         size: root.width, root.height
         spacing: "10dp"
+        padding: "10dp"
 
         MDToolbar:
             elevation: 10
@@ -259,5 +281,3 @@ WindowManager:
             on_press:
                 app.root.get_screen("admin").power_off()
 
-<ListItem>:
-    id: list_item

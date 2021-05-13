@@ -1,16 +1,12 @@
-import os
-
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
-from kivymd.uix.button import MDFillRoundFlatButton
-from kivymd.uix.list import ILeftBodyTouch, OneLineIconListItem, OneLineListItem, OneLineAvatarListItem, \
-    OneLineRightIconListItem, CheckboxRightWidget, IRightBodyTouch, MDCheckbox, ILeftBody, ContainerSupport, \
-    OneLineAvatarIconListItem
+from kivymd.uix.button import MDFillRoundFlatButton, MDRoundFlatButton
+from kivymd.uix.list import OneLineListItem
 from kivymd.uix.screen import MDScreen
 
-
-from ballot import get_ballot
+from get_ballot import get_ballot
+from get_preferences import get_preferences
 from get_results import get_results
 from write_to_db import write_to_db
 
@@ -72,6 +68,8 @@ class ListItem(OneLineListItem):
         self.bg_color = app.theme_cls.primary_color
         app.vote = self.text
         app.root.get_screen('voting').ids.vote_btn.disabled = False
+        app.root.get_screen('voting').activate_preferences(self.text)
+
 
     def deselect(self):
         self.is_selected = False
@@ -85,19 +83,70 @@ class ListItem(OneLineListItem):
         self.select()
 
 
+class PreferenceButton(MDRoundFlatButton):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.font_size = 20
+        self.disabled = True
+        self.is_selected = False
+
+    def select(self):
+        self.is_selected = True
+        app.preference = self.text
+
+    def deselect(self):
+        self.is_selected = False
+        app.preference = None
+
+    def on_press(self):
+        if not self.disabled:
+            for item in VotingWindow.list_items:
+                if item.is_selected:
+                    item.deselect()
+            self.select()
+
+
 class VotingWindow(MDScreen):
     list_items = []
+    preference_buttons = []
+
+    def draw_preferences(self):
+        if not self.preference_buttons:
+            for i in range(101, 119):
+                new_button = PreferenceButton(text=str(i))
+                self.ids.preferences_grid.add_widget(new_button)
+                self.preference_buttons.append(new_button)
+
+
+    def draw_candidates(self):
+        if not app.vote:
+            ballot = get_ballot()
+            for digit, candidate in ballot:
+                string = f"({digit}) {candidate}"
+                new_list_item = ListItem(text=string)
+                self.ids.scroll.add_widget(new_list_item)
+                self.list_items.append(new_list_item)
+            last_item = ListItem(text="Не подкрепям никого.")
+            self.ids.scroll.add_widget(last_item)
+            self.list_items.append(last_item)
+
+    def activate_preferences(self, party_name):
+        all_preferences = get_preferences()
+        current_preferences = all_preferences[party_name]
+        for btn in self.preference_buttons:
+            if btn.text in current_preferences.keys():
+                btn.disabled = False
+            else:
+                btn.disabled = True
+
 
     def on_enter(self, *args):
+        self.ids.scroll_view.scroll_y = 1
         app.is_final_vote = False
         self.ids.vote_btn.disabled = app.vote is None
+        self.draw_candidates()
+        self.draw_preferences()
 
-        ballot = get_ballot()
-        for digit, candidate in ballot:
-            string = digit + " : " + candidate
-            new_list_item = ListItem(text=string)
-            self.ids.scroll.add_widget(new_list_item)
-            self.list_items.append(new_list_item)
 
 
     def vote(self):
@@ -113,9 +162,20 @@ class SubmitWindow(MDScreen):
     def submit(self):
         if app.is_final_vote:
             write_to_db(app.vote)
+        self.clear_current_state()
+        self.restart()
+
+    def clear_current_state(self):
+        app.vote = None
+        app.preference = None
+        app.is_final_vote = False
+        self.manager.get_screen('voting').ids.scroll.clear_widgets()
+        self.manager.get_screen('voting').ids.preferences_grid.clear_widgets()
         self.manager.get_screen('entry').ids.pin_input.text = ''
+
+    def restart(self):
         app.root.current = "entry"
-        self.manager.transition.direction = "left"
+        self.manager.transition.direction = "right"
 
 
 class WindowManager(ScreenManager):
@@ -130,6 +190,7 @@ class VoteApp(MDApp):
     is_voting_started = False
     is_final_vote = False
     vote = None
+    preference = None
 
     def build(self):
         self.theme_cls.primary_palette = "BlueGray"

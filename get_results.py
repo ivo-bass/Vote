@@ -1,7 +1,7 @@
 import csv
 import os
 
-from ballot import get_ballot
+from get_ballot import get_ballot
 
 FILE_NAME = 'results.csv'
 CWD_PATH = os.path.abspath(os.getcwd())
