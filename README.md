@@ -5,10 +5,10 @@ This is an app blah blah blah...
 
 ## Packaging
 
-**Packaging App for Android**
+### Packaging App for Android
 
 
-First you’ll need to install a package called buildozer with pip:
+First you’ll need to install a package called ***buildozer*** with pip:
 ```
 pip install buildozer
 ```
@@ -32,7 +32,7 @@ package.name = vote
 package.domain = org.vote
 ```
 
-At this point, you’re almost ready to build your application, but first, you’ll want to install the dependencies for buildozer. Once those are installed, copy your calculator application into your new folder and rename it to main.py. This is required by buildozer. If you don’t have the file named correctly, then the build will fail.
+At this point, you’re almost ready to build your application, but first, you’ll want to install the [dependencies](https://buildozer.readthedocs.io/en/latest/installation.html#targeting-android) for buildozer. Once those are installed, copy your calculator application into your new folder and rename it to main.py. This is required by buildozer. If you don’t have the file named correctly, then the build will fail.
 
 Now you can run the following command:
 
@@ -40,13 +40,13 @@ Now you can run the following command:
 buildozer -v android debug
 ```
 
-The build step takes a long time! Depending on your hardware, it may take even longer, so feel free to grab a cup of coffee or go for a run while you wait. Buildozer will download whatever Android SDK pieces it needs during the build process. If everything goes according to plan, then you’ll have a file named something like `vote-0.1-debug.apk` in your bin folder.
+The build step takes a long time! Depending on your hardware, it may take even longer, so feel free to grab a cup of coffee or go for a run while you wait. Buildozer will download whatever ***Android SDK*** pieces it needs during the build process. If everything goes according to plan, then you’ll have a file named something like `vote-0.1-debug.apk` in your bin folder.
 
 
-**Packaging App for iOS**
+### Packaging App for iOS
 
 
-The instructions for building an application for iOS are a bit more complex than Android. For the most up-to-date information, you should always use Kivy’s official packaging documentation. You’ll need to run the following commands before you can package your application for iOS on your Mac:
+The instructions for building an application for iOS are a bit more complex than Android. For the most up-to-date information, you should always use Kivy’s official packaging [documentation](https://kivy.org/doc/stable/guide/packaging-ios.html). You’ll need to run the following commands before you can package your application for iOS on your Mac:
 
 ```brew install autoconf automake libtool pkg-config```
 
@@ -64,7 +64,7 @@ Once those are all installed successfully, you’ll need to compile the distribu
 
 ```./toolchain.py build python3 kivy```
 
-If you get an error that says iphonesimulator can’t be found, then see this StackOverflow answer for ways to solve that issue. Then try running the above commands again.
+If you get an error that says iphonesimulator can’t be found, then see this [StackOverflow](https://stackoverflow.com/questions/39564420/i-get-xcrun-error-sdk-iphonesimulator-cannot-be-located-when-running-the-t) answer for ways to solve that issue. Then try running the above commands again.
 
 If you run into SSL errors, then you probably don’t have Python’s OpenSSL setup. This command should fix that:
 
@@ -78,13 +78,13 @@ Once you’ve run all the previous commands successfully, you can create your Xc
 
 ```./toolchain.py create <title> <app_directory>```
 
-There should be a directory named title with your Xcode project in it. Now you can open that project in Xcode and work on it from there. Note that if you want to submit your application to the App Store, then you’ll have to create a developer account at developer.apple.com and pay their yearly fee.
+There should be a directory named title with your Xcode project in it. Now you can open that project in Xcode and work on it from there. Note that if you want to submit your application to the App Store, then you’ll have to create a developer account at [developer.apple.com](https://developer.apple.com/) and pay their yearly fee.
 
 
-**Packaging App for Windows**
+### Packaging App for Windows
 
 
-You can package your Kivy application for Windows using `PyInstaller`. If you’ve never used it before, then check out Using PyInstaller to Easily Distribute Python Applications.
+You can package your Kivy application for Windows using `PyInstaller`. If you’ve never used it before, then check out [Using PyInstaller to Easily Distribute Python Applications](https://realpython.com/pyinstaller-python/) .
 
 You can install PyInstaller using pip:
 
@@ -100,9 +100,9 @@ This command will create a Windows executable and several other files. The `-w` 
 ### Packaging App for macOS
 
 
-You can use `PyInstaller` to create a Mac executable just like you did for Windows. The only requirement is that you run this command on a Mac:
+You can use [PyInstaller](https://www.pyinstaller.org/) to create a Mac executable just like you did for Windows. The only requirement is that you run this command on a Mac:
 
 ```pyinstaller main.py -w --onefile```
 
-This will create a single file executable in the dist folder. The executable will be the same name as the Python file that you passed to PyInstaller. If you’d like to reduce the file size of the executable, or you’re using GStreamer in your application, then check out Kivy’s packaging page for macOS for more information.
+This will create a single file executable in the dist folder. The executable will be the same name as the Python file that you passed to PyInstaller. If you’d like to reduce the file size of the executable, or you’re using GStreamer in your application, then check out Kivy’s [packaging page for macOS](https://kivy.org/doc/stable/guide/packaging-osx.html) for more information.
 
