@@ -137,8 +137,10 @@ class VotingWindow(MDScreen):
             self.list_items.append(last_item)
 
     def activate_preferences(self, party_name):
+        current_preferences = {}
         all_preferences = get_preferences()
-        current_preferences = all_preferences[party_name]
+        if party_name in all_preferences:
+            current_preferences = all_preferences[party_name]
         for btn in self.preference_buttons:
             if btn.text in current_preferences.keys():
                 btn.disabled = False
@@ -156,7 +158,9 @@ class VotingWindow(MDScreen):
 
 
     def vote(self):
-        choice_text = app.vote
+        vote_text = app.vote
+        preference_text = "Без избрана преференция" if not app.preference else app.preference
+        choice_text = f"{vote_text}\n{preference_text}"
         self.manager.get_screen('submit').ids.submit_label.text = \
             f"Вие избрахте:\n\n{choice_text}\n\nПотвърждавате ли направения избор?"
 
