@@ -1,12 +1,10 @@
-# Vote App
-Todo:
-This is an app blah blah blah...
+# Introduction
 
+This is an app that emulates an electronic voting system like those used on elections.
 
 ## Packaging
 
-**Packaging App for Android**
-
+### Packaging App for Android
 
 First you’ll need to install a package called buildozer with pip:
 ```
@@ -43,7 +41,7 @@ buildozer -v android debug
 The build step takes a long time! Depending on your hardware, it may take even longer, so feel free to grab a cup of coffee or go for a run while you wait. Buildozer will download whatever Android SDK pieces it needs during the build process. If everything goes according to plan, then you’ll have a file named something like `vote-0.1-debug.apk` in your bin folder.
 
 
-**Packaging App for iOS**
+### Packaging App for iOS
 
 
 The instructions for building an application for iOS are a bit more complex than Android. For the most up-to-date information, you should always use Kivy’s official packaging documentation. You’ll need to run the following commands before you can package your application for iOS on your Mac:
@@ -52,17 +50,11 @@ The instructions for building an application for iOS are a bit more complex than
 
 ```brew link libtool```
 
-```sudo easy_install pip```
+```pip install cython kivy-ios```
 
-```sudo pip install Cython==0.29.10```
+Once those are all installed successfully, you’ll need to compile the distribution using the following command:
 
-Once those are all installed successfully, you’ll need to compile the distribution using the following commands:
-
-```git clone git://github.com/kivy/kivy-ios```
-
-```cd kivy-ios```
-
-```./toolchain.py build python3 kivy```
+```toolchain build python3 kivy```
 
 If you get an error that says iphonesimulator can’t be found, then see this StackOverflow answer for ways to solve that issue. Then try running the above commands again.
 
@@ -76,12 +68,12 @@ Now go back and try running the toolchain command again.
 
 Once you’ve run all the previous commands successfully, you can create your Xcode project using the toolchain script. Your main application’s entry point must be named main.py before you create the Xcode project. Here is the command you’ll run:
 
-```./toolchain.py create <title> <app_directory>```
+```toolchain create <title> <app_directory>```
 
 There should be a directory named title with your Xcode project in it. Now you can open that project in Xcode and work on it from there. Note that if you want to submit your application to the App Store, then you’ll have to create a developer account at developer.apple.com and pay their yearly fee.
 
 
-**Packaging App for Windows**
+### Packaging App for Windows
 
 
 You can package your Kivy application for Windows using `PyInstaller`. If you’ve never used it before, then check out Using PyInstaller to Easily Distribute Python Applications.
