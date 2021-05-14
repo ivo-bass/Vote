@@ -69,7 +69,10 @@ class ListItem(OneLineListItem):
         self.bg_color = app.theme_cls.primary_color
         app.vote = self.text
         app.root.get_screen('voting').ids.vote_btn.disabled = False
+        app.root.get_screen('voting').ids.preferences_grid.clear_widgets()
+        app.root.get_screen('voting').draw_preferences()
         app.root.get_screen('voting').activate_preferences(self.text)
+
 
 
     def deselect(self):
@@ -117,11 +120,13 @@ class VotingWindow(MDScreen):
     preference_buttons = []
 
     def draw_preferences(self):
-        if not self.preference_buttons:
-            for i in range(101, 119):
-                new_button = PreferenceButton(text=str(i))
-                self.ids.preferences_grid.add_widget(new_button)
-                self.preference_buttons.append(new_button)
+        app.preference = None
+        VotingWindow.preference_buttons = []
+        self.ids.preferences_grid.clear_widgets()
+        for i in range(101, 119):
+            new_button = PreferenceButton(text=str(i))
+            self.ids.preferences_grid.add_widget(new_button)
+            self.preference_buttons.append(new_button)
 
 
     def draw_candidates(self):
@@ -159,8 +164,8 @@ class VotingWindow(MDScreen):
 
     def vote(self):
         vote_text = app.vote
-        preference_text = "Без избрана преференция" if not app.preference else app.preference
-        choice_text = f"{vote_text}\n{preference_text}"
+        preference_text = "Без избрана преференция" if not app.preference else f"С преференция:\n({app.preference})"
+        choice_text = f"{vote_text}\n\n{preference_text}"
         self.manager.get_screen('submit').ids.submit_label.text = \
             f"Вие избрахте:\n\n{choice_text}\n\nПотвърждавате ли направения избор?"
 
@@ -179,6 +184,8 @@ class SubmitWindow(MDScreen):
         app.vote = None
         app.preference = None
         app.is_final_vote = False
+        VotingWindow.list_items = []
+        VotingWindow.preference_buttons = []
         self.manager.get_screen('voting').ids.scroll.clear_widgets()
         self.manager.get_screen('voting').ids.preferences_grid.clear_widgets()
         self.manager.get_screen('entry').ids.pin_input.text = ''
