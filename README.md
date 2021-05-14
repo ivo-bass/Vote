@@ -1,12 +1,10 @@
-# Vote App
-Todo:
-This is an app blah blah blah...
+# Introduction
 
+This is an app that emulates an electronic voting system like those used on elections.
 
 ## Packaging
 
 ### Packaging App for Android
-
 
 First you’ll need to install a package called ***buildozer*** with pip:
 ```
@@ -52,17 +50,11 @@ The instructions for building an application for iOS are a bit more complex than
 
 ```brew link libtool```
 
-```sudo easy_install pip```
+```pip install cython kivy-ios```
 
-```sudo pip install Cython==0.29.10```
+Once those are all installed successfully, you’ll need to compile the distribution using the following command:
 
-Once those are all installed successfully, you’ll need to compile the distribution using the following commands:
-
-```git clone git://github.com/kivy/kivy-ios```
-
-```cd kivy-ios```
-
-```./toolchain.py build python3 kivy```
+```toolchain build python3 kivy```
 
 If you get an error that says iphonesimulator can’t be found, then see this [StackOverflow](https://stackoverflow.com/questions/39564420/i-get-xcrun-error-sdk-iphonesimulator-cannot-be-located-when-running-the-t) answer for ways to solve that issue. Then try running the above commands again.
 
@@ -76,7 +68,7 @@ Now go back and try running the toolchain command again.
 
 Once you’ve run all the previous commands successfully, you can create your Xcode project using the toolchain script. Your main application’s entry point must be named main.py before you create the Xcode project. Here is the command you’ll run:
 
-```./toolchain.py create <title> <app_directory>```
+```toolchain create <title> <app_directory>```
 
 There should be a directory named title with your Xcode project in it. Now you can open that project in Xcode and work on it from there. Note that if you want to submit your application to the App Store, then you’ll have to create a developer account at [developer.apple.com](https://developer.apple.com/) and pay their yearly fee.
 
