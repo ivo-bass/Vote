@@ -18,3 +18,5 @@ def get_preferences():
             preferences[string] = pref_dd
 
     return preferences
+
+print(get_preferences())

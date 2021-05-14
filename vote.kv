@@ -16,9 +16,8 @@ WindowManager:
         type: "top"
 
     MDCard:
-        size_hint: None, None
-        size: "400dp", "500dp"
-        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        size_hint: 0.4, 0.75
+        pos_hint: {"center_x": 0.5, "y": 0.15}
         elevation: "13dp"
         padding: "50dp"
         spacing: "20dp"
@@ -103,21 +102,20 @@ WindowManager:
             MDRoundFlatButton:
                 text: "#"
 
+        MDRoundFlatButton:
+            id: clear
+            text: " ИЗЧИСТИ "
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            on_press: root.clear_field()
 
         MDFillRoundFlatButton:
             text: "ПРОДЪЛЖИ"
-            pos_hint: {"center_x": 0.5}
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
             on_release:
                 if root.ids.pin_input.text in app.VOTER_PINS and app.is_voting_started: app.root.current = "voting"
                 elif root.ids.pin_input.text in app.ADMIN_PINS: app.root.current = "admin"
                 else: root.clear_field()
                 root.manager.transition.direction = "left"
-
-        MDRoundFlatButton:
-            id: clear
-            text: " ИЗЧИСТИ "
-            pos_hint: {"center_x": 0.5}
-            on_press: root.clear_field()
 
 
 
@@ -201,17 +199,8 @@ WindowManager:
             text: ""
             pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
-
         MDSeparator:
             height: "2dp"
-
-        MDFillRoundFlatButton:
-            text: "ПОТВЪРДИ"
-            pos_hint: {"center_x": 0.5}
-            on_press:
-                app.is_final_vote = True
-                root.submit()
-
 
         MDRoundFlatButton:
             text: "ПРОМЕНИ"
@@ -219,6 +208,13 @@ WindowManager:
             on_release:
                 app.root.current = "voting"
                 root.manager.transition.direction = "right"
+
+        MDFillRoundFlatButton:
+            text: "ПОТВЪРДИ"
+            pos_hint: {"center_x": 0.5}
+            on_press:
+                app.is_final_vote = True
+                root.submit()
 
 
 
