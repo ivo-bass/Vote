@@ -62,10 +62,12 @@ class ListItem(OneLineListItem):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.is_selected = False
+        self.theme_text_color = "Custom"
+        self.text_color = [0, 0, 0, 1]
 
     def select(self):
         self.is_selected = True
-        self.theme_text_color = "Error"
+        self.text_color = [1, 1, 1, 1]
         self.bg_color = app.theme_cls.primary_color
         app.vote = self.text
         app.preference = None
@@ -76,7 +78,7 @@ class ListItem(OneLineListItem):
 
     def deselect(self):
         self.is_selected = False
-        self.theme_text_color = "Primary"
+        self.text_color = [0, 0, 0, 1]
         self.bg_color = [0, 0, 0, 0]
         app.vote = None
 
@@ -93,15 +95,19 @@ class PreferenceButton(MDRoundFlatButton):
         self.font_size = 16
         self.disabled = True
         self.is_selected = False
+        self.default_text_color = self.text_color
+        self.theme_text_color = "Custom"
 
     def select(self):
         self.theme_text_color = "Error"
+        self.text_color = [1, 1, 1, 1]
         self.md_bg_color = app.theme_cls.primary_color
         self.is_selected = True
         app.preference = self.text
 
     def deselect(self):
         self.theme_text_color = "Primary"
+        self.text_color = self.default_text_color
         self.md_bg_color = [0, 0, 0, 0]
         self.is_selected = False
         app.preference = None
