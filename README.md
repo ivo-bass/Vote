@@ -97,7 +97,7 @@ The following command will package your application:
 This command will create a Windows executable and several other files. The `-w` argument tells PyInstaller that this is a windowed application, rather than a command-line application. If you’d rather have PyInstaller create a single executable file, then you can pass in the `--onefile `argument in addition to `-w`.
 
 
-**Packaging App for macOS**
+### Packaging App for macOS
 
 
 You can use `PyInstaller` to create a Mac executable just like you did for Windows. The only requirement is that you run this command on a Mac:
