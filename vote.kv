@@ -150,10 +150,20 @@ WindowManager:
                     id: scroll
 
             MDGridLayout:
-                id: preferences_grid
-                cols: 3
-                rows: 6
-                spacing: "10dp"
+                rows: 3
+                size_hint_x: 0.4
+
+                MDLabel:
+                    text: "Преференция за кандидат"
+                    size_hint_y: 0.1
+
+                MDGridLayout:
+                    id: preferences_grid
+                    cols: 3
+                    rows: 6
+                    spacing: "10dp"
+
+
 
 
         MDSeparator:

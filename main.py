@@ -65,6 +65,7 @@ class ListItem(OneLineListItem):
 
     def select(self):
         self.is_selected = True
+        self.theme_text_color = "Error"
         self.bg_color = app.theme_cls.primary_color
         app.vote = self.text
         app.root.get_screen('voting').ids.vote_btn.disabled = False
@@ -73,6 +74,7 @@ class ListItem(OneLineListItem):
 
     def deselect(self):
         self.is_selected = False
+        self.theme_text_color = "Primary"
         self.bg_color = [0, 0, 0, 0]
         app.vote = None
 
@@ -86,21 +88,25 @@ class ListItem(OneLineListItem):
 class PreferenceButton(MDRoundFlatButton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.font_size = 20
+        self.font_size = 16
         self.disabled = True
         self.is_selected = False
 
     def select(self):
+        self.theme_text_color = "Error"
+        self.md_bg_color = app.theme_cls.primary_color
         self.is_selected = True
         app.preference = self.text
 
     def deselect(self):
+        self.theme_text_color = "Primary"
+        self.md_bg_color = [0, 0, 0, 0]
         self.is_selected = False
         app.preference = None
 
     def on_press(self):
         if not self.disabled:
-            for item in VotingWindow.list_items:
+            for item in VotingWindow.preference_buttons:
                 if item.is_selected:
                     item.deselect()
             self.select()
