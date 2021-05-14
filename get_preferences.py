@@ -19,4 +19,5 @@ def get_preferences():
 
     return preferences
 
-print(get_preferences())
+
+# print(get_preferences())
