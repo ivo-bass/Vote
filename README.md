@@ -3,10 +3,10 @@ Todo:
 This is an app blah blah blah...
 
 
-# Packaging
-**____**
-**Packaging App for Android**
-**____**
+## Packaging
+
+###Packaging App for Android
+
 
 First you’ll need to install a package called buildozer with pip:
 ```
@@ -42,9 +42,8 @@ buildozer -v android debug
 
 The build step takes a long time! Depending on your hardware, it may take even longer, so feel free to grab a cup of coffee or go for a run while you wait. Buildozer will download whatever Android SDK pieces it needs during the build process. If everything goes according to plan, then you’ll have a file named something like `vote-0.1-debug.apk` in your bin folder.
 
-**____**
-**Packaging App for iOS**
-**____**
+
+###Packaging App for iOS
 
 The instructions for building an application for iOS are a bit more complex than Android. For the most up-to-date information, you should always use Kivy’s official packaging documentation. You’ll need to run the following commands before you can package your application for iOS on your Mac:
 
@@ -80,9 +79,9 @@ Once you’ve run all the previous commands successfully, you can create your Xc
 
 There should be a directory named title with your Xcode project in it. Now you can open that project in Xcode and work on it from there. Note that if you want to submit your application to the App Store, then you’ll have to create a developer account at developer.apple.com and pay their yearly fee.
 
-**____**
-**Packaging App for Windows**
-**____**
+
+###Packaging App for Windows
+
 
 You can package your Kivy application for Windows using `PyInstaller`. If you’ve never used it before, then check out Using PyInstaller to Easily Distribute Python Applications.
 
@@ -96,9 +95,9 @@ The following command will package your application:
 
 This command will create a Windows executable and several other files. The `-w` argument tells PyInstaller that this is a windowed application, rather than a command-line application. If you’d rather have PyInstaller create a single executable file, then you can pass in the `--onefile `argument in addition to `-w`.
 
-**____**
-**Packaging App for macOS**
-**____**
+
+###Packaging App for macOS
+
 
 You can use `PyInstaller` to create a Mac executable just like you did for Windows. The only requirement is that you run this command on a Mac:
 

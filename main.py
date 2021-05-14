@@ -12,22 +12,35 @@ from write_to_db import write_vote_to_db, write_preference_to_db
 
 
 class ResultsWindow(MDScreen):
+    """
+    This screen renders the list of the voting results in descending order,
+    which include only candidates with 1 vote at least.
+    """
     def on_enter(self, *args):
+        # get results from db results.csv file
         results = get_results()
+
         counter = 0
         for name, votes in results:
             counter += 1
             string = f"{counter}.  {name} => {votes}бр. гласове"
+
+            # instantiate a row for the list view and add it to widget
             new_list_item = OneLineListItem(text=string)
             self.ids.results_list.add_widget(new_list_item)
 
 
 class AdminWindow(MDScreen):
+    """
+    This screen is accessible only with admin PIN.
+    It starts and stops the elections.
+    """
     @staticmethod
     def power_off():
         app.stop()
 
     def start_elections(self):
+        # change values of dependant variables
         app.is_voting_started = True
         app.status = "АКТИВНО ГЛАСУВАНЕ"
         self.manager.get_screen('entry').ids.pin_input.text = ''
