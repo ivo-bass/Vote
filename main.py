@@ -8,7 +8,7 @@ from kivymd.uix.screen import MDScreen
 from get_ballot import get_ballot
 from get_preferences import get_preferences
 from get_results import get_results
-from write_to_db import write_to_db
+from write_to_db import write_vote_to_db, write_preference_to_db
 
 
 class ResultsWindow(MDScreen):
@@ -176,7 +176,8 @@ class VotingWindow(MDScreen):
 class SubmitWindow(MDScreen):
     def submit(self):
         if app.is_final_vote:
-            write_to_db(app.vote)
+            write_vote_to_db(app.vote)
+            write_preference_to_db(app.vote, app.preference)
         self.clear_current_state()
         self.restart()
 
