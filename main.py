@@ -68,12 +68,11 @@ class ListItem(OneLineListItem):
         self.theme_text_color = "Error"
         self.bg_color = app.theme_cls.primary_color
         app.vote = self.text
+        app.preference = None
         app.root.get_screen('voting').ids.vote_btn.disabled = False
         app.root.get_screen('voting').ids.preferences_grid.clear_widgets()
         app.root.get_screen('voting').draw_preferences()
         app.root.get_screen('voting').activate_preferences(self.text)
-
-
 
     def deselect(self):
         self.is_selected = False
@@ -120,13 +119,14 @@ class VotingWindow(MDScreen):
     preference_buttons = []
 
     def draw_preferences(self):
-        app.preference = None
         VotingWindow.preference_buttons = []
         self.ids.preferences_grid.clear_widgets()
         for i in range(101, 119):
             new_button = PreferenceButton(text=str(i))
             self.ids.preferences_grid.add_widget(new_button)
             self.preference_buttons.append(new_button)
+        if app.vote:
+            self.activate_preferences(app.vote)
 
 
     def draw_candidates(self):
