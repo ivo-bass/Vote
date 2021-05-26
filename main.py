@@ -183,7 +183,9 @@ class VotingWindow(MDScreen):
 
     def vote(self):
         vote_text = app.vote
-        pref_name = get_preferences()[app.vote][app.preference]
+        pref_name = ""
+        if app.preference:
+            pref_name = get_preferences()[app.vote][app.preference]
         preference_text = "Без избрана преференция" if not app.preference \
             else f"С преференция:\n({app.preference}) {pref_name}"
         choice_text = f"{vote_text}\n\n{preference_text}"

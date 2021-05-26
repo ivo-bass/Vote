@@ -1,8 +1,6 @@
 import csv
 import os
 
-from get_ballot import get_ballot
-
 FILE_NAME = 'results.csv'
 CWD_PATH = os.path.abspath(os.getcwd())
 FILE_PATH = os.path.join(CWD_PATH, FILE_NAME)
@@ -13,8 +11,9 @@ def read_results():
     with open(FILE_PATH, "r") as file:
         reader = csv.reader(file)
         for row in reader:
-            votes.extend(row)
-        return votes
+            if row:
+                votes.extend(row)
+    return votes
 
 
 def calculate_results(results):
@@ -44,7 +43,6 @@ def print_results(results):
         counter += 1
         word = "гласа" if votes > 1 else "глас"
         print(f"{counter}. {name} => {votes} {word}.")
-
 
 # print(get_results())
 # print_results(get_results())

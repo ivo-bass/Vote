@@ -5,6 +5,10 @@
 This is an app that emulates an electronic voting system like those used on machine voting driven elections.
 Developed in ***Python*** with *KivyMD*.
 
+## Video
+
+[![Vote App Video](https://img.youtube.com/vi/CSBX624h_1Q/mqdefault.jpg)](https://youtu.be/CSBX624h_1Q)
+
 ## Packaging
 
 ### Packaging App for Android
