@@ -7,7 +7,7 @@ Developed in ***Python*** with *KivyMD*.
 
 ## Video
 
-[![Vote App Video](https://img.youtube.com/vi/CSBX624h_1Q/mqdefault.jpg)](https://youtu.be/CSBX624h_1Q)
+[![Vote App Video](https://img.youtube.com/vi/CBtlW1eGJSk/mqdefault.jpg)](https://youtu.be/CBtlW1eGJSk)
 
 ## Packaging
 
